@@ -1,8 +1,6 @@
 package com.leetcode.arrays;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.*;
 
 public class NextGreaterElement496 {
     // https://leetcode.com/problems/next-greater-element-i/?envType=problem-list-v2&envId=array
@@ -36,11 +34,36 @@ public class NextGreaterElement496 {
         return result.stream().mapToInt(Integer::intValue).toArray();
 
     }
+
+    public int[] nextGreaterElementOptimized(int[] nums1, int[] nums2) {
+        Map<Integer, Integer> map = new HashMap<>();
+        Stack<Integer> stack = new Stack<>();
+        // Step 1 Build next greater element for num2
+        for(int num:nums2)
+        {
+            while(!stack.isEmpty() && stack.peek()<num)
+            {
+                map.put(stack.pop(),num);
+            }
+            stack.push(num);
+
+        }
+        while(! stack.isEmpty()){
+            map.put(stack.pop(),-1);
+        }
+        int [] result = new int[nums1.length];
+        for(int i=0;i<nums1.length;i++)
+        {
+            result[i] = map.get(nums1[i]);
+        }
+        return result;
+
+    }
     public static void main(String[] args) {
         NextGreaterElement496 obj = new NextGreaterElement496();
         int[] nums1 = {4,1,2};
         int[] nums2 = {1,3,4,2};
-        System.out.println(Arrays.toString(obj.nextGreaterElement(nums1, nums2)));
+        System.out.println(Arrays.toString(obj.nextGreaterElementOptimized(nums1, nums2)));
     }
 
 }
